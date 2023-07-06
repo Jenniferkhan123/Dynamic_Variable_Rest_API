@@ -1,0 +1,307 @@
+{
+	"info": {
+		"_postman_id": "1c4c9268-3ac7-4a81-a8b1-df73804c95f4",
+		"name": "Dynamic_Variable_Rest_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27083534"
+	},
+	"item": [
+		{
+			"name": "Put TC1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Step 1 : Validate the status code \r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Step2 :Declare expected results\r",
+							"//Step2.1 : Fetch data from request \r",
+							"var requestBody = pm.request.body.raw;\r",
+							"requestBody=JSON.parse(requestBody);\r",
+							"var req_name=requestBody.name;\r",
+							"var req_job=requestBody.job;\r",
+							"\r",
+							"//Step2.2: Generate date in required format\r",
+							"//var actualdate= new Date().toJSON().slice(0,13);\r",
+							"var actualdate= new Date().toISOString().slice(0,13);\r",
+							"\r",
+							"//Step 3 : Validate Response Body \r",
+							"//Step 3.1 : Extract response body \r",
+							"var responseBody = pm.response.json();\r",
+							"//Step 3.2 : Extract response body parameters \r",
+							"var res_name = responseBody.name;\r",
+							"var res_job= responseBody.job;\r",
+							"var res_id= responseBody.id;\r",
+							"var res_updatedAt=responseBody.updatedAt;\r",
+							"res_updatedAt=res_updatedAt.slice(0,13);\r",
+							"\r",
+							"//Step 3.3 : Validate response body\r",
+							"pm.test(\"Validate Response Body Parameter Name\", function() {\r",
+							"    pm.expect(res_name).to.eql(req_name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Body Parameter Job\", function() {\r",
+							"    pm.expect(res_job).to.eql(req_job);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Body Parameter ID\", function() {\r",
+							"    pm.expect(res_id).to.not.null;\r",
+							"    pm.expect(res_id).to.not.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Body Parameter Date\", function() {\r",
+							"    pm.expect(res_updatedAt).to.eql(actualdate);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var name=pm.variables.replaceIn('{{$randomFullName}}');\r",
+							"pm.collectionVariables.set(\"Coll_Name\",name);\r",
+							"\r",
+							"var job=pm.variables.replaceIn('{{$randomJobTitle}}');\r",
+							"pm.collectionVariables.set(\"Coll_Job\",job);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{Coll_Name}}\",\r\n    \"job\": \"{{Coll_Job}}\"\r\n} ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Put_URL}}",
+					"host": [
+						"{{Put_URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post TC1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"//Step 2 Declare expected result\r",
+							"//step2.1 fetch expected data from request\r",
+							"var requestBody=pm.request.body.raw;\r",
+							"var requestBody=JSON.parse(requestBody);\r",
+							"var req_name=requestBody.name;\r",
+							"var req_job= requestBody.job;\r",
+							"\r",
+							"//3 Generate date required format\r",
+							"//var actualdate=new=[Date().toJSON().slice(0,13);\r",
+							"var actualdate=new Date().toISOString().slice(0,13);\r",
+							"\r",
+							"//Step4 Validete response body \r",
+							"//step4.1 extract response body\r",
+							"var responseBody=pm.response.json();\r",
+							"//step 4.2 extract response body parameters\r",
+							"var res_name=responseBody.name;\r",
+							"var res_job=responseBody.job;\r",
+							"var res_id=responseBody.id;\r",
+							"var res_createdAt=responseBody.createdAt;\r",
+							"var res_createdAt=res_createdAt.slice(0,13);\r",
+							"\r",
+							"pm.test(\"Validate responseBody parameters Name\",function() {\r",
+							"    pm.expect(res_name).to.eql(req_name);\r",
+							"});\r",
+							" \r",
+							" pm.test(\"Validate responseBody parameters Job\", function() {\r",
+							"     pm.expect(res_job).to.eql(req_job);\r",
+							" });\r",
+							"\r",
+							" pm.test(\"Validate responseBody parameters ID \", function() {\r",
+							"     pm.expect(res_id).to.not.null;\r",
+							"     pm.expect(res_id).to.not.eql(0);\r",
+							" });\r",
+							"\r",
+							" pm.test(\"Validate responseBody parameters Actualdate\", function() {\r",
+							"     pm.expect(res_createdAt).to.eql(actualdate);\r",
+							" });"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var name=pm.variables.replaceIn('{{$randomFullName}}');\r",
+							"pm.collectionVariables.set(\"Coll_Name\",name);\r",
+							"\r",
+							"var job=pm.variables.replaceIn('{{$randomJobTitle}}');\r",
+							"pm.collectionVariables.set(\"Coll_Job\",job);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{Coll_Name}}\",\r\n    \"job\": \"{{Coll_Job}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Post_URL}}",
+					"host": [
+						"{{Post_URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch TC1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Validate Statuscode \r",
+							"pm.test(\"status code is 200\",function()\r",
+							"{\r",
+							"     pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Declare the request body\r",
+							"//Fetch data from request body\r",
+							"var requestbody=pm.request.body.raw;\r",
+							"requestbody=JSON.parse(requestbody);\r",
+							"console.log(requestbody);\r",
+							"\r",
+							"var req_name=requestbody.name;\r",
+							"var req_job=requestbody.job;\r",
+							"\r",
+							"//Generate the required date format\r",
+							" var actualdate=new Date().toJSON().slice(0,10);\r",
+							"\r",
+							" //Validate the response body\r",
+							" //Extract data from requestbody\r",
+							" var responsebody=pm.response.json();\r",
+							" //extract responsebody parameter\r",
+							" var res_name=responsebody.name;\r",
+							"var res_job=responsebody.job;\r",
+							"var res_updatedAt=responsebody.updatedAt;\r",
+							"res_updatedAt=res_updatedAt.slice(0,10);\r",
+							"console.log(responsebody);\r",
+							"//Validte responsebody parameters\r",
+							"pm.test(\"Validate responsebody parameter,Name\",function(){\r",
+							"    pm.expect(req_name).to.eql(res_name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate responsebody parameter,JOB\",function(){\r",
+							"    pm.expect(req_job).to.eql(res_job);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate responsebody parameter,Date\",function(){\r",
+							"    pm.expect(res_updatedAt).to.eql(actualdate);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var name=pm.variables.replaceIn('{{$randomFirstName}}');\r",
+							"pm.collectionVariables.set(\"name\",name);\r",
+							"\r",
+							"var job=pm.variables.replaceIn('{{$randomJobTitle}}');\r",
+							"pm.collectionVariables.set(\"job\",job);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{name}}\",\r\n    \"job\": \"{{job}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Patch_URL}}",
+					"host": [
+						"{{Patch_URL}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "Coll_Name",
+			"value": ""
+		},
+		{
+			"key": "Coll_Job",
+			"value": ""
+		},
+		{
+			"key": "name",
+			"value": ""
+		},
+		{
+			"key": "job",
+			"value": ""
+		}
+	]
+}
